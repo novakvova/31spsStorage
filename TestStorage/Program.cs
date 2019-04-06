@@ -14,7 +14,9 @@ namespace TestStorage
         {
             using (EFContext context = new EFContext())
             {
+                Console.WriteLine("Begin Seed");
                 SeedDB(context);
+                Console.WriteLine("End Seed");
             }
         }
         static void SeedDB(EFContext context)
@@ -30,13 +32,17 @@ namespace TestStorage
             context.Users.AddRange(userGenerator.Generate(250000).ToArray());
             context.SaveChanges();
 
-            var imageGenerator = new Faker<UserImage>()
+            for (int j=0;j<10;j++)
+            {
+                var imageGenerator = new Faker<UserImage>()
                                     .StrictMode(false)
-                                    .RuleFor(i => i.Name, f => f.Lorem.Sentence())
+                                    .RuleFor(i => i.Name, f => Guid.NewGuid().ToString()+".jpg")
                                     //.RuleFor(i => i.Id, f => imageId++)
                                     .RuleFor(i => i.UserId, f => f.Random.Number(1, 250000));
-            context.UserImages.AddRange(imageGenerator.Generate(750000).ToArray());
-            context.SaveChanges();
+                context.UserImages.AddRange(imageGenerator.Generate(75000).ToArray());
+                context.SaveChanges();
+            }
+            
 
         }
     }
