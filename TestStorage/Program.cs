@@ -34,6 +34,7 @@ namespace TestStorage
                         u.Age,
                         Images = u.UserImages.Select(g=>g)
                     });
+                query = query.OrderBy(u => u.Id).Skip(10).Take(20000);
                 int i = 1;
                 foreach (var user in query)
                 {
